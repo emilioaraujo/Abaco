@@ -1,36 +1,43 @@
-package com.blueboxmicrosystems.fragments;
+package com.blueboxmicrosystems.abaco;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.plus.PlusOneButton;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A fragment with a Google +1 button.
  * Activities that contain this fragment must implement the
- * {@link AddAccount.OnFragmentInteractionListener} interface
+ * {@link AccountList.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link AddAccount#newInstance} factory method to
+ * Use the {@link AccountList#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddAccount extends Fragment {
+public class AccountList extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    // The request code must be 0 or greater.
+    private static final int PLUS_ONE_REQUEST_CODE = 0;
+    // The URL to +1.  Must be a valid URL.
+    private final String PLUS_ONE_URL = "http://developer.android.com";
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private PlusOneButton mPlusOneButton;
 
     private OnFragmentInteractionListener mListener;
 
-    public AddAccount() {
+    public AccountList() {
         // Required empty public constructor
     }
 
@@ -40,11 +47,11 @@ public class AddAccount extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment AddAccount.
+     * @return A new instance of fragment AccountList.
      */
     // TODO: Rename and change types and number of parameters
-    public static AddAccount newInstance(String param1, String param2) {
-        AddAccount fragment = new AddAccount();
+    public static AccountList newInstance(String param1, String param2) {
+        AccountList fragment = new AccountList();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -55,8 +62,7 @@ public class AddAccount extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        this.getActivity().setTitle("Account Detail");
+        this.getActivity().setTitle("Account List");
 
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -67,8 +73,32 @@ public class AddAccount extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_account, container, false);
+        View view = inflater.inflate(R.layout.fragment_account_list, container, false);
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fabAddAccount);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Log.d("", "Boton add account presionado");
+                ((MainActivity) getActivity()).replaceFragments(AccountAdd.class);
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            }
+        });
+
+        //Find the +1 button
+        // mPlusOneButton = (PlusOneButton) view.findViewById(R.id.plus_one_button);
+
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Refresh the state of the +1 button each time the activity receives focus.
+        //mPlusOneButton.initialize(PLUS_ONE_URL, PLUS_ONE_REQUEST_CODE);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -89,21 +119,19 @@ public class AddAccount extends Fragment {
         }
     }
 
+
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
 
-    public void save(MainActivity mainActivity) {
-        Log.d("", "Salvando!!!");
-        mainActivity.replaceFragments(Accounts.class);
+    public void cancel(MainActivity activity) {
+        Log.d("", "Cancelando!!!");
+        activity.replaceFragments(MainFragment.class);
+
     }
 
-    public void cancel(MainActivity mainActivity) {
-        Log.d("", "Cancelando!!!");
-        mainActivity.replaceFragments(Accounts.class);
-    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -119,4 +147,5 @@ public class AddAccount extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }

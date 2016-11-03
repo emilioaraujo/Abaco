@@ -1,9 +1,10 @@
-package com.blueboxmicrosystems.fragments;
+package com.blueboxmicrosystems.abaco;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,12 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FragmentTwo.OnFragmentInteractionListener} interface
+ * {@link AccountAdd.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FragmentTwo#newInstance} factory method to
+ * Use the {@link AccountAdd#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentTwo extends Fragment {
+public class AccountAdd extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -29,7 +30,7 @@ public class FragmentTwo extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public FragmentTwo() {
+    public AccountAdd() {
         // Required empty public constructor
     }
 
@@ -39,11 +40,11 @@ public class FragmentTwo extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentTwo.
+     * @return A new instance of fragment AccountAdd.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentTwo newInstance(String param1, String param2) {
-        FragmentTwo fragment = new FragmentTwo();
+    public static AccountAdd newInstance(String param1, String param2) {
+        AccountAdd fragment = new AccountAdd();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -54,6 +55,9 @@ public class FragmentTwo extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.getActivity().setTitle("Account Detail");
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -64,7 +68,7 @@ public class FragmentTwo extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fragment_two, container, false);
+        return inflater.inflate(R.layout.fragment_account_add, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -89,6 +93,18 @@ public class FragmentTwo extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public void save(MainActivity activity) {
+        Log.d("", "Salvando!!!");
+        activity.replaceFragments(AccountList.class);
+    }
+
+
+    public void cancel(MainActivity activity) {
+        Log.d("", "Cancelando!!!");
+        activity.replaceFragments(AccountList.class);
+
     }
 
     /**

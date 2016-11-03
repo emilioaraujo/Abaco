@@ -1,4 +1,4 @@
-package com.blueboxmicrosystems.fragments;
+package com.blueboxmicrosystems.abaco;
 
 import org.junit.Test;
 

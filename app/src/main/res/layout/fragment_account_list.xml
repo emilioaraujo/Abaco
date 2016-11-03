@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Accounts">
+    tools:context=".AccountList">
 
     <com.google.android.gms.plus.PlusOneButton xmlns:plus="http://schemas.android.com/apk/lib/com.google.android.gms.plus"
         android:id="@+id/plus_one_button"
@@ -21,7 +21,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".Accounts">
+    tools:context="com.blueboxmicrosystems.abaco.AccountList">
 
 
     <android.support.design.widget.FloatingActionButton

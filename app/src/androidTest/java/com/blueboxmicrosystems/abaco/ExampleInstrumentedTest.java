@@ -1,4 +1,4 @@
-package com.blueboxmicrosystems.fragments;
+package com.blueboxmicrosystems.abaco;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
