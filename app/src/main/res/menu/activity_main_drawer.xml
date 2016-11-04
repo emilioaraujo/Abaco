@@ -4,36 +4,39 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@android:drawable/ic_dialog_dialer"
+            android:icon="@mipmap/ic_home_black"
             android:title="DashBoard" />
         <item
             android:id="@+id/nav_accounts"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@mipmap/ic_monetization_on_black"
             android:title="Accounts" />
         <item
             android:id="@+id/nav_income_categories"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@mipmap/ic_add_circle_black"
             android:title="Income Categories" />
         <item
             android:id="@+id/nav_expense_categories"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@mipmap/ic_remove_circle_black"
             android:title="Expense Categories" />
         <item
             android:id="@+id/nav_persons_entities"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@mipmap/ic_account_balance_black"
             android:title="Persons - Entities" />
     </group>
 
     <item android:title="Application">
         <menu>
-
             <item
                 android:id="@+id/nav_settings"
-                android:icon="@drawable/ic_menu_manage"
+                android:icon="@mipmap/ic_settings_black"
                 android:title="Settings" />
             <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
                 android:id="@+id/nav_about"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@mipmap/ic_help_black"
                 android:title="About" />
         </menu>
     </item>
