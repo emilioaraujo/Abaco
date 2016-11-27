@@ -4,7 +4,7 @@ android {
     compileSdkVersion 24
     buildToolsVersion "24.0.0"
     defaultConfig {
-        applicationId "com.blueboxmicrosystems.fragments"
+        applicationId "com.blueboxmicrosystems.abaco"
         minSdkVersion 15
         targetSdkVersion 24
         versionCode 1
@@ -28,5 +28,6 @@ dependencies {
     compile 'com.android.support:design:24.0.0'
     compile 'com.android.support:support-v4:24.0.0'
     compile 'com.google.android.gms:play-services:9.8.0'
+    compile 'com.getbase:floatingactionbutton:1.10.1'
     testCompile 'junit:junit:4.12'
 }

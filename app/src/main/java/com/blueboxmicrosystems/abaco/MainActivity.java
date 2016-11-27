@@ -2,6 +2,7 @@ package com.blueboxmicrosystems.abaco;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,15 +17,26 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.blueboxmicrosystems.abaco.database.AbacoDatabaseHelper;
+
+import java.util.Currency;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         AccountList.OnFragmentInteractionListener,
         AccountAdd.OnFragmentInteractionListener,
+        TagList.OnFragmentInteractionListener,
+        CategoryList.OnFragmentInteractionListener,
+
         MainFragment.OnFragmentInteractionListener {
 
     public String currentFrame;
     public Menu mMenu;
-
+    public static AbacoDatabaseHelper abacoDatabaseHelper;
+    public static SQLiteDatabase abacoDataBase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +44,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         if (savedInstanceState == null) {
             Fragment fragment;
@@ -55,8 +66,35 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //Abrimos la base de datos 'DBUsuarios' en modo escritura
+        abacoDatabaseHelper = new AbacoDatabaseHelper(this, "AbacoDataBase", null, 26);
+        abacoDataBase = abacoDatabaseHelper.getWritableDatabase();
     }
 
+
+    public static Map getAvailableCurrencies() {
+        Locale[] locales = Locale.getAvailableLocales();
+        //
+        // We use TreeMap so that the order of the data in the map sorted
+        // based on the country name.
+        //
+        Map currencies = new TreeMap();
+        for (Locale locale : locales) {
+            try {
+                currencies.put(locale.getDisplayCountry(), Currency.getInstance(locale));
+            } catch (Exception e) {
+                // when the locale is not supported
+            }
+        }
+        return currencies;
+    }
+
+
+    //@Override
+    //public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        //Toast.makeText(this,"Fecha: " + year + "-" + month + "-" + dayOfMonth,Toast.LENGTH_LONG).show();
+    //}
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
@@ -70,7 +108,7 @@ public class MainActivity extends AppCompatActivity
                 })
                 .setNegativeButton(android.R.string.no, null).show();
     }
-
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -78,8 +116,8 @@ public class MainActivity extends AppCompatActivity
         mMenu = menu;
         return true;
     }
-
-
+*/
+/*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -127,6 +165,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -137,13 +176,19 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_accounts) {
             replaceFragments(AccountList.class);
         }
-        if (id == R.id.nav_income_categories) {
-            //replaceFragments(FragmentOne.class);
+        if (id == R.id.nav_categories) {
+            replaceFragments(CategoryList.class);
         }
-        if (id == R.id.nav_expense_categories) {
+        if (id == R.id.nav_tags) {
+            replaceFragments(TagList.class);
+        }
+        if (id == R.id.nav_transactions) {
             //replaceFragments(FragmentTwo.class);
         }
         if (id == R.id.nav_settings) {
+            //replaceFragments(FragmentOne.class);
+        }
+        if (id == R.id.nav_share) {
             //replaceFragments(FragmentOne.class);
         }
         if (id == R.id.nav_about) {
@@ -161,7 +206,7 @@ public class MainActivity extends AppCompatActivity
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+/*
         (mMenu.findItem(R.id.action_close)).setVisible(false);
         if (fragmentClass.toString().contains("Add")) {
             (mMenu.findItem(R.id.action_cancel)).setVisible(true);
@@ -174,6 +219,7 @@ public class MainActivity extends AppCompatActivity
             (mMenu.findItem(R.id.action_close)).setVisible(true);
             (mMenu.findItem(R.id.action_cancel)).setVisible(false);
         }
+*/
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 

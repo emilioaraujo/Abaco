@@ -10,5 +10,11 @@
     <string name="action_save">Save</string>
     <string name="action_settings">Settings</string>
 
-
+    <string-array name="account_type">
+        <item>Select</item>
+        <item>Wallet</item>
+        <item>Saving</item>
+        <item>Loan</item>
+        <item>Credit Card</item>
+    </string-array>
 </resources>
