@@ -7,31 +7,27 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:layout_height="match_parent">
 
-    <TextView
-        android:text="Category Name"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView2" />
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/txtCategoryName" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Category Name"
+            android:id="@+id/txtCategoryName" />
+    </android.support.design.widget.TextInputLayout>
 
-    <TextView
-        android:text="Category Description"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView3" />
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:id="@+id/txtCategoryDescription"
-        android:inputType="text" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Category Description"
+            android:id="@+id/txtCategoryDescription" />
+    </android.support.design.widget.TextInputLayout>
 
 
     <LinearLayout

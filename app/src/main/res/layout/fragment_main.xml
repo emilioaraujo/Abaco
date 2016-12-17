@@ -1,28 +1,52 @@
-<!--
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.blueboxmicrosystems.abaco.MainFragment">
-</FrameLayout>
--->
+<?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context=".MainFragment">
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabAddTransaction"
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/fabAddTransactionMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:backgroundTint="@android:color/holo_orange_light"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        app:fab_labelStyle="@style/Etiquetas"
+        fab:fab_addButtonColorNormal="?attr/colorPrimary"
+        fab:fab_addButtonSize="normal"
+        fab:fab_labelsPosition="left">
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabActionIncome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="?attr/colorAccent"
+            fab:fab_icon="@drawable/arrow_down_bold"
+            fab:fab_size="mini"
+            fab:fab_title="Money Income" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabActionExpense"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="?attr/colorAccent"
+            fab:fab_icon="@drawable/arrow_up_bold"
+            fab:fab_size="mini"
+            fab:fab_title="Money Expense" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabActionTransfer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="?attr/colorAccent"
+            fab:fab_icon="@drawable/shuffle_variant"
+            fab:fab_size="mini"
+            fab:fab_title="Account Transfer" />
+
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </android.support.design.widget.CoordinatorLayout>

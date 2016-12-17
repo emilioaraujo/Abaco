@@ -3,13 +3,15 @@ package com.blueboxmicrosystems.abaco;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 
 /**
@@ -72,17 +74,32 @@ public class MainFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fabAddTransaction);
-        fab.setOnClickListener(new View.OnClickListener() {
+        final FloatingActionsMenu fabMenu = (FloatingActionsMenu) view.findViewById(R.id.fabAddTransactionMenu);
+
+        FloatingActionButton fabActionIncome = (FloatingActionButton) view.findViewById(R.id.fabActionIncome);
+        fabActionIncome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-               Log.d("", "Boton add account presionado");
-               // ((MainActivity) getActivity()).replaceFragments(AccountAdd.class);
-               // Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                System.out.println("fabActionIncome");
+                fabMenu.collapse();
             }
         });
-
+        FloatingActionButton fabActionExpense = (FloatingActionButton) view.findViewById(R.id.fabActionExpense);
+        fabActionExpense.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("fabActionExpense");
+                fabMenu.collapse();
+            }
+        });
+        FloatingActionButton fabActionTransfer= (FloatingActionButton) view.findViewById(R.id.fabActionTransfer);
+        fabActionTransfer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("fabActionTransfer");
+                fabMenu.collapse();
+            }
+        });
         //Find the +1 button
         // mPlusOneButton = (PlusOneButton) view.findViewById(R.id.plus_one_button);
 

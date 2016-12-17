@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity
         AccountAdd.OnFragmentInteractionListener,
         TagList.OnFragmentInteractionListener,
         CategoryList.OnFragmentInteractionListener,
-
+        TransactionList.OnFragmentInteractionListener,
         MainFragment.OnFragmentInteractionListener {
 
     public String currentFrame;
@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity
             replaceFragments(TagList.class);
         }
         if (id == R.id.nav_transactions) {
-            //replaceFragments(FragmentTwo.class);
+            replaceFragments(TransactionList.class);
         }
         if (id == R.id.nav_settings) {
             //replaceFragments(FragmentOne.class);

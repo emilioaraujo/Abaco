@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".AccountAdd">
+    tools:context=".AccountList">
 
 
     <ScrollView
@@ -43,71 +43,42 @@
                 android:layout_alignRight="@+id/txtAccountName"
                 android:layout_alignEnd="@+id/txtAccountName" />
 
-            <TextView
-                android:id="@+id/lblAccountName"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Name:"
-                android:layout_below="@+id/spAccountType"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_height="match_parent">
 
-            <EditText
-                android:id="@+id/txtAccountName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Account Name"
-                android:inputType="textCapWords"
-                android:maxLength="30"
-                android:layout_marginTop="16dp"
-                android:layout_below="@+id/spAccountType"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Account Name"
+                    android:id="@+id/txtAccountName"
+                    android:inputType="textCapWords" />
+            </android.support.design.widget.TextInputLayout>
 
-            <TextView
-                android:id="@+id/lblAccountDescription"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Description:"
-                android:layout_above="@+id/sp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/txtAccountName" />
+                android:layout_height="match_parent">
 
-            <EditText
-                android:id="@+id/txtAccountDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Account Description"
-                android:inputType="textPersonName"
-                android:maxLength="30"
-                android:layout_below="@+id/lblAccountDescription"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Account Description"
+                    android:id="@+id/txtAccountDescription"
+                    android:inputType="text" />
+            </android.support.design.widget.TextInputLayout>
 
-            <TextView
-                android:id="@+id/lblInitialBalance"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Initial Balance:"
-                android:layout_below="@+id/txtAccountDescription"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_height="match_parent">
 
-            <EditText
-                android:id="@+id/txtInitialBalance"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Initial Balance"
-                android:inputType="numberDecimal"
-                android:layout_below="@+id/lblInitialBalance"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Initial Balance"
+                    android:id="@+id/txtInitialBalance"
+                    android:inputType="none"
+                    android:editable="false" />
+            </android.support.design.widget.TextInputLayout>
 
             <TextView
                 android:text="Pay Day"
@@ -171,26 +142,19 @@
 
             </LinearLayout>
 
-            <TextView
-                android:text="Amount Limit"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/spMonthExpire"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="14dp"
-                android:id="@+id/lblAmountLimit" />
+                android:layout_height="match_parent"
+                android:id="@+id/tilAmountLimit">
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:ems="10"
-                android:layout_below="@+id/lblAmountLimit"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:id="@+id/txtAmountLimit"
-                android:hint="Limit" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Amount Limit"
+                    android:id="@+id/txtAmountLimit"
+                    android:inputType="none"
+                    android:editable="false" />
+            </android.support.design.widget.TextInputLayout>
 
             <TextView
                 android:text="Account Currency"

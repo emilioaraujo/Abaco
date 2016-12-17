@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blueboxmicrosystems.abaco.dialog.CustomCalculator;
 import com.blueboxmicrosystems.abaco.model.ListAccountModel;
 import com.blueboxmicrosystems.abaco.model.ListCategoryModel;
 import com.google.android.gms.plus.PlusOneButton;
@@ -66,12 +68,12 @@ public class AccountList extends Fragment {
     private EditText txtAmountLimit;
     private TextView lblPayDay;
     private TextView lblExpireEnd;
-    private TextView lblAmountLimit;
     private Spinner spAccountType;
     private Spinner spPayDay;
     private Spinner spYearExpire;
     private Spinner spMonthExpire;
     private Spinner spAccountCurrency;
+    private TextInputLayout tilAmountLimit;
     AlertDialog accountDialog;
     View view;
 
@@ -123,6 +125,8 @@ public class AccountList extends Fragment {
 
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_account_list, container, false);
+
+
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fabAddAccount);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -229,16 +233,16 @@ public class AccountList extends Fragment {
             this.lblExpireEnd.setVisibility(View.VISIBLE);
             this.spMonthExpire.setVisibility(View.VISIBLE);
             this.spYearExpire.setVisibility(View.VISIBLE);
-            this.lblAmountLimit.setVisibility(View.VISIBLE);
-            this.txtAmountLimit.setVisibility(View.VISIBLE);
+            this.tilAmountLimit.setVisibility(View.VISIBLE);
+
         } else {
             this.lblPayDay.setVisibility(View.GONE);
             this.spPayDay.setVisibility(View.GONE);
             this.lblExpireEnd.setVisibility(View.GONE);
             this.spMonthExpire.setVisibility(View.GONE);
             this.spYearExpire.setVisibility(View.GONE);
-            this.lblAmountLimit.setVisibility(View.GONE);
-            this.txtAmountLimit.setVisibility(View.GONE);
+            this.tilAmountLimit.setVisibility(View.GONE);
+            //this.txtAmountLimit.setVisibility(View.GONE);
         }
     }
 
@@ -318,19 +322,36 @@ public class AccountList extends Fragment {
         //labels
         lblPayDay = (TextView) v.findViewById(R.id.lblPayDay);
         lblExpireEnd = (TextView) v.findViewById(R.id.lblExpireEnd);
-        lblAmountLimit = (TextView) v.findViewById(R.id.lblAmountLimit);
+
 
         //inputs
         this.txtAccountName = (EditText) v.findViewById(R.id.txtAccountName);
         this.txtAccountDescription = (EditText) v.findViewById(R.id.txtAccountDescription);
         this.txtInitialBalance = (EditText) v.findViewById(R.id.txtInitialBalance);
-        this.txtAmountLimit = (EditText) v.findViewById(R.id.txtAmountLimit);
         this.spAccountType = (Spinner) v.findViewById(R.id.spAccountType);
         this.spPayDay = (Spinner) v.findViewById(R.id.spPayDay);
         this.spMonthExpire = (Spinner) v.findViewById(R.id.spMonthExpire);
         this.spYearExpire = (Spinner) v.findViewById(R.id.spYearExpire);
         this.spAccountCurrency = (Spinner) v.findViewById(R.id.spAccountCurrency);
+        this.txtAmountLimit = (EditText) v.findViewById(R.id.txtAmountLimit);
+        this.tilAmountLimit=(TextInputLayout) v.findViewById(R.id.tilAmountLimit);
         //this.showOrHideControls();
+
+        txtInitialBalance.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    CustomCalculator calc = new CustomCalculator();
+                    calc.show(getActivity().getSupportFragmentManager(), "Calculator");
+                    calc.setOnCalculatorResultListener(new CustomCalculator.OnCalculatorResultListener() {
+                        @Override
+                        public void onResult(Double result) {
+                            txtInitialBalance.setText(result.toString());
+                        }
+                    });
+                }
+            }
+        });
 
         ArrayAdapter<CharSequence> adapterAccountType = ArrayAdapter.createFromResource(view.getContext(), R.array.account_type, android.R.layout.simple_spinner_item);
         adapterAccountType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

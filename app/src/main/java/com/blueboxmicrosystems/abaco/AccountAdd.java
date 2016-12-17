@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -55,7 +56,7 @@ public class AccountAdd extends DialogFragment implements
     private EditText txtAmountLimit;
     private TextView lblPayDay;
     private TextView lblExpireEnd;
-    private TextView lblAmountLimit;
+    private TextInputLayout tilAmountLimit;
     private Spinner spAccountType;
     private Spinner spPayDay;
     private Spinner spYearExpire;
@@ -150,7 +151,7 @@ public class AccountAdd extends DialogFragment implements
         //labels
         this.lblPayDay = (TextView) view.findViewById(R.id.lblPayDay);
         this.lblExpireEnd = (TextView) view.findViewById(R.id.lblExpireEnd);
-        this.lblAmountLimit = (TextView) view.findViewById(R.id.lblAmountLimit);
+
 
         //inputs
         this.txtAccountName = (EditText) view.findViewById(R.id.txtAccountName);
@@ -251,16 +252,16 @@ public class AccountAdd extends DialogFragment implements
             this.lblExpireEnd.setVisibility(View.VISIBLE);
             this.spMonthExpire.setVisibility(View.VISIBLE);
             this.spYearExpire.setVisibility(View.VISIBLE);
-            this.lblAmountLimit.setVisibility(View.VISIBLE);
-            this.txtAmountLimit.setVisibility(View.VISIBLE);
+            this.tilAmountLimit.setVisibility(View.VISIBLE);
+
         } else {
             this.lblPayDay.setVisibility(View.GONE);
             this.spPayDay.setVisibility(View.GONE);
             this.lblExpireEnd.setVisibility(View.GONE);
             this.spMonthExpire.setVisibility(View.GONE);
             this.spYearExpire.setVisibility(View.GONE);
-            this.lblAmountLimit.setVisibility(View.GONE);
-            this.txtAmountLimit.setVisibility(View.GONE);
+            this.tilAmountLimit.setVisibility(View.GONE);
+
         }
     }
 
