@@ -70,14 +70,14 @@ public class CustomCalculator extends DialogFragment {
 
     private void addToOperation(String value, String sign) {
         if (operation.size() == 0) {
-            if (value.equals("") && (lastKey.equals("+") || lastKey.equals("-") || lastKey.equals("*") || lastKey.equals("/"))) {
+            if (value.equals("") && (lastKey.equals("+") || lastKey.equals("-") || lastKey.equals("*") || lastKey.equals("/")|| lastKey.equals("="))) {
                 return;
             }
         }
         if (operation.size() > 0) {
             String lastEntry = operation.get(operation.size() - 1);
             if (lastValue.equals("")) {
-                if (lastKey.equals("+") || lastKey.equals("-") || lastKey.equals("*") || lastKey.equals("/")) {
+                if (lastKey.equals("+") || lastKey.equals("-") || lastKey.equals("*") || lastKey.equals("/")|| lastKey.equals("=")) {
                     operation.remove(operation.size() - 1);
                 }
             }
@@ -93,10 +93,10 @@ public class CustomCalculator extends DialogFragment {
         }
 
         System.out.println(listString);
-        calcular();
+        calculeResult();
     }
 
-    private void calcular() {
+    private void calculeResult() {
         lastValue = "";
         ArrayList<String> calc = operation;
         Double res = 0D;

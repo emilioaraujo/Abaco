@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.blueboxmicrosystems.abaco.dialog.TagAddDialog;
 import com.blueboxmicrosystems.abaco.model.ListAccountModel;
 import com.blueboxmicrosystems.abaco.model.ListCategoryModel;
 import com.blueboxmicrosystems.abaco.model.ListTagModel;
@@ -48,15 +49,12 @@ public class TagList extends Fragment {
     private String mParam1;
     private String mParam2;
     private PlusOneButton mPlusOneButton;
-    Button btnCancel;
-    Button btnSave;
     ListView list;
     View view;
-    private EditText txtTagName;
-    private EditText txtTagDescription;
     private TagList.OnFragmentInteractionListener mListener;
-    private Integer currentTagId;
+    private Integer currentRecordId;
     AlertDialog tagDialog;
+    TagAddDialog createUpdateDialog;
     public TagList() {
         // Required empty public constructor
     }
@@ -100,10 +98,9 @@ public class TagList extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("", "Boton add category presionado");
-                currentTagId = 0;
-                tagDialog = getTagDialog();
-                tagDialog.show();
+                Log.d("", "Boton add tag presionado");
+                currentRecordId = 0;
+                showCreateUpdateDialog(currentRecordId);
             }
         });
 
@@ -142,11 +139,8 @@ public class TagList extends Fragment {
 
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        currentTagId = tagId.get(position);
-                        tagDialog = getTagDialog();
-                        tagDialog.show();
-                        txtTagName.setText(tagName.get(position).toString());
-                        txtTagDescription.setText(tagDescription.get(position).toString());
+                        currentRecordId = tagId.get(position);
+                        showCreateUpdateDialog(currentRecordId);
                     }
                 });
             }
@@ -180,74 +174,30 @@ public class TagList extends Fragment {
         }
     }
 
-    private boolean validate(View view) {
-        if (this.txtTagName.getText().toString().isEmpty()) {
-            this.txtTagName.setError("Tag name does not be blank");
-            return false;
-        }
-        return true;
-    }
+    public void showCreateUpdateDialog(Integer id){
+        Bundle args = new Bundle();
+        args.putInt("id", id);
 
-    public AlertDialog getTagDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        createUpdateDialog = new TagAddDialog();
+        createUpdateDialog.setArguments(args);
+        createUpdateDialog.show(getActivity().getSupportFragmentManager(), "Tag");
+        createUpdateDialog.setActionListener(new TagAddDialog.ActionListener() {
+            @Override
+            public void onSave(Integer id) {
+                configureTagList();
+            }
 
-        View v = inflater.inflate(R.layout.dialog_tag_add, null);
-        builder.setView(v);
-
-        btnCancel = (Button) v.findViewById(R.id.btnCancel);
-        btnSave = (Button) v.findViewById(R.id.btnSave);
-        txtTagName = (EditText) v.findViewById(R.id.txtTagName);
-        txtTagDescription = (EditText) v.findViewById(R.id.txtTagDescription);
-
-        btnCancel.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        tagDialog.dismiss();
-                    }
-                }
-        );
-
-        btnSave.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (!validate(v)) {
-                            return;
-                        }
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put("icon", "");
-                        contentValues.put("name", txtTagName.getText().toString());
-                        contentValues.put("description", txtTagDescription.getText().toString());
-                        try {
-                            if (currentTagId == 0) {
-                                MainActivity.abacoDataBase.insertOrThrow("main.tag", null, contentValues);
-                            } else {
-                                MainActivity.abacoDataBase.update("main.tag", contentValues, "id=" + currentTagId, null);
-                            }
-                            configureTagList();
-                            tagDialog.dismiss();
-                        } catch (Exception ex) {
-                            // TODO: Cambiar a mensaje de alerta
-                            Toast.makeText(view.getContext(), ex.getMessage(), Toast.LENGTH_SHORT);
-                        }
-                    }
-                }
-        );
-        return builder.create();
+            @Override
+            public void onCancel() {
+                //nada por hacer aqui
+            }
+        });
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    public void cancel(MainActivity activity) {
-        Log.d("", "Cancelando!!!");
-        activity.replaceFragments(MainFragment.class);
-
     }
 
 

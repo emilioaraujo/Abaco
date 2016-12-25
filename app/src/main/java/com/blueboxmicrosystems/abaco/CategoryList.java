@@ -1,5 +1,6 @@
 package com.blueboxmicrosystems.abaco;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -7,6 +8,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -27,6 +29,7 @@ import android.widget.ListView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.blueboxmicrosystems.abaco.dialog.CategoryAddDialog;
 import com.blueboxmicrosystems.abaco.model.ListCategoryModel;
 import com.google.android.gms.plus.PlusOneButton;
 
@@ -67,8 +70,8 @@ public class CategoryList extends Fragment implements
     private EditText txtCategoryName;
     private EditText txtCategoryDescription;
     private OnFragmentInteractionListener mListener;
-    private Integer currentCategoryId;
-    AlertDialog categoryDialog;
+    private Integer currentRecordId;
+    CategoryAddDialog createUpdateDialog;
     AppBarLayout appBarLayout;
 
     public CategoryList() {
@@ -114,9 +117,8 @@ public class CategoryList extends Fragment implements
             @Override
             public void onClick(View view) {
                 Log.d("", "Boton add category presionado");
-                currentCategoryId = 0;
-                categoryDialog = getCategoryDialog();
-                categoryDialog.show();
+                currentRecordId = 0;
+                showCreateUpdateDialog(currentRecordId);
             }
         });
         tabs = (TabLayout) view.findViewById(R.id.tabs);
@@ -125,7 +127,7 @@ public class CategoryList extends Fragment implements
                     @Override
                     public void onTabSelected(TabLayout.Tab tab) {
                         transactionTypeId = tab.getPosition()+2;
-                        configureCategoryList();
+                        configureList();
                     }
                     @Override
                     public void onTabUnselected(TabLayout.Tab tab) {
@@ -139,18 +141,19 @@ public class CategoryList extends Fragment implements
         );
         list = (ListView) view.findViewById(R.id.lvCategory);
         appBarLayout = (AppBarLayout) view.findViewById(R.id.appbar);
-        configureCategoryList();
+        configureList();
         //Find the +1 button
         // mPlusOneButton = (PlusOneButton) view.findViewById(R.id.plus_one_button);
         return view;
     }
 
-    public void configureCategoryList() {
+    public void configureList() {
         if (MainActivity.abacoDataBase != null) {
+
             if(transactionTypeId==2){
-                appBarLayout.setBackgroundColor(Color.GREEN);
-            }else{
-                appBarLayout.setBackgroundColor(Color.RED);
+                appBarLayout.setBackgroundColor(getResources().getColor(R.color.colorIncome));
+            } else {
+                appBarLayout.setBackgroundColor(getResources().getColor(R.color.colorExpense));
             }
             Cursor c = MainActivity.abacoDataBase.rawQuery("" +
                     "select id,transaction_type_id, name, description " +
@@ -181,11 +184,8 @@ public class CategoryList extends Fragment implements
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        currentCategoryId = categoryId.get(position);
-                        categoryDialog = getCategoryDialog();
-                        categoryDialog.show();
-                        txtCategoryName.setText(categoryName.get(position).toString());
-                        txtCategoryDescription.setText(categoryDescription.get(position).toString());
+                        currentRecordId = categoryId.get(position);
+                        showCreateUpdateDialog(currentRecordId);
                     }
                 });
             }
@@ -206,63 +206,25 @@ public class CategoryList extends Fragment implements
         }
     }
 
-    private boolean validate(View view) {
-        if (this.txtCategoryName.getText().toString().isEmpty()) {
-            this.txtCategoryName.setError("Account name does not be blank");
-            return false;
-        }
-        return true;
-    }
+    public void showCreateUpdateDialog(Integer id){
+        Bundle args = new Bundle();
+        args.putInt("id", id);
+        args.putInt("transactionTypeId",transactionTypeId);
 
-    public AlertDialog getCategoryDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        createUpdateDialog = new CategoryAddDialog();
+        createUpdateDialog.setArguments(args);
+        createUpdateDialog.show(getActivity().getSupportFragmentManager(), "Category");
+        createUpdateDialog.setActionListener(new CategoryAddDialog.ActionListener() {
+            @Override
+            public void onSave(Integer id) {
+                configureList();
+            }
 
-        View v = inflater.inflate(R.layout.dialog_category_add, null);
-        builder.setView(v);
-
-        btnCancel = (Button) v.findViewById(R.id.btnCancel);
-        btnSave = (Button) v.findViewById(R.id.btnSave);
-        txtCategoryName = (EditText) v.findViewById(R.id.txtCategoryName);
-        txtCategoryDescription = (EditText) v.findViewById(R.id.txtCategoryDescription);
-
-        btnCancel.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        categoryDialog.dismiss();
-                    }
-                }
-        );
-
-        btnSave.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (!validate(v)) {
-                          return;
-                        }
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put("icon", "");
-                        contentValues.put("transaction_type_id", transactionTypeId.toString());
-                        contentValues.put("name", txtCategoryName.getText().toString());
-                        contentValues.put("description", txtCategoryDescription.getText().toString());
-                        try {
-                            if (currentCategoryId == 0) {
-                                MainActivity.abacoDataBase.insertOrThrow("transaction_category", null, contentValues);
-                            } else {
-                                MainActivity.abacoDataBase.update("transaction_category", contentValues, "id=" + currentCategoryId, null);
-                            }
-                            configureCategoryList();
-                            categoryDialog.dismiss();
-                        } catch (Exception ex) {
-                            // TODO: Cambiar a mensaje de alerta
-                            Toast.makeText(view.getContext(), ex.getMessage(), Toast.LENGTH_SHORT);
-                        }
-                    }
-                }
-        );
-        return builder.create();
+            @Override
+            public void onCancel() {
+                //nada por hacer aqui
+            }
+        });
     }
 
     @Override
@@ -292,10 +254,7 @@ public class CategoryList extends Fragment implements
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
     }
-    public void cancel(MainActivity activity) {
-        Log.d("", "Cancelando!!!");
-        activity.replaceFragments(MainFragment.class);
-    }
+
 
     /**
      * This interface must be implemented by activities that contain this
