@@ -102,7 +102,7 @@ public class MainFragment extends Fragment {
         });
         //Find the +1 button
         // mPlusOneButton = (PlusOneButton) view.findViewById(R.id.plus_one_button);
-
+        MainActivity.toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         return view;
     }
 

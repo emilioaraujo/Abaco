@@ -95,7 +95,7 @@ public class AbacoDatabaseHelper extends SQLiteOpenHelper {
             "                                UNIQUE,\n" +
             "    description         TEXT,\n" +
             "    icon                TEXT,\n" +
-            "    color               TEXT\n" +
+            "    color               INTEGER DEFAULT 0xfff06292\n" +
             ");\n" +
             "";
 

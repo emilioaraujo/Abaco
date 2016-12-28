@@ -39,14 +39,14 @@ public class MainActivity extends AppCompatActivity
     public Menu mMenu;
     public static AbacoDatabaseHelper abacoDatabaseHelper;
     public static SQLiteDatabase abacoDataBase;
+    public static Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         if (savedInstanceState == null) {
             Fragment fragment;
             Class fragmentClass = MainFragment.class;
@@ -69,8 +69,8 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //Abrimos la base de datos 'DBUsuarios' en modo escritura
-        abacoDatabaseHelper = new AbacoDatabaseHelper(this, "AbacoDataBase", null, 26);
+        //Abrimos la base de datos en modo escritura
+        abacoDatabaseHelper = new AbacoDatabaseHelper(this, "AbacoDataBase", null, 27);
         abacoDataBase = abacoDatabaseHelper.getWritableDatabase();
     }
 
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity
 
     //@Override
     //public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        //Toast.makeText(this,"Fecha: " + year + "-" + month + "-" + dayOfMonth,Toast.LENGTH_LONG).show();
+    //Toast.makeText(this,"Fecha: " + year + "-" + month + "-" + dayOfMonth,Toast.LENGTH_LONG).show();
     //}
     @Override
     public void onBackPressed() {
@@ -110,15 +110,16 @@ public class MainActivity extends AppCompatActivity
                 })
                 .setNegativeButton(android.R.string.no, null).show();
     }
-/*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        mMenu = menu;
-        return true;
-    }
-*/
+
+    /*
+        @Override
+        public boolean onCreateOptionsMenu(Menu menu) {
+            // Inflate the menu; this adds items to the action bar if it is present.
+            getMenuInflater().inflate(R.menu.main, menu);
+            mMenu = menu;
+            return true;
+        }
+    */
 /*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

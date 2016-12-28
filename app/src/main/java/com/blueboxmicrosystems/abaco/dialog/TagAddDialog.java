@@ -112,6 +112,7 @@ public class TagAddDialog extends DialogFragment {
                         contentValues.put("icon", "");
                         contentValues.put("name", txtTagName.getText().toString());
                         contentValues.put("description", txtTagDescription.getText().toString());
+                        contentValues.put("color", "0xff4db6ac");
                         try {
                             if (id == 0) {
                                 MainActivity.abacoDataBase.insertOrThrow("main.tag", null, contentValues);

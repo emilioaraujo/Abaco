@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -127,6 +128,18 @@ public class CategoryList extends Fragment implements
                     @Override
                     public void onTabSelected(TabLayout.Tab tab) {
                         transactionTypeId = tab.getPosition()+2;
+
+                        if(tab.getPosition()==0) {
+                            //toolbar color
+                            MainActivity.toolbar.setBackgroundColor(getResources().getColor(R.color.colorIncome));
+                            //navbar color
+                            //getActivity().getWindow().setNavigationBarColor(getResources().getColor(R.color.colorIncome));
+                        }else{
+                            //toolbar color
+                            MainActivity.toolbar.setBackgroundColor(getResources().getColor(R.color.colorExpense));
+                            //navbar color
+                            //getActivity().getWindow().setNavigationBarColor(getResources().getColor(R.color.colorExpense));
+                        }
                         configureList();
                     }
                     @Override
@@ -152,8 +165,10 @@ public class CategoryList extends Fragment implements
 
             if(transactionTypeId==2){
                 appBarLayout.setBackgroundColor(getResources().getColor(R.color.colorIncome));
+                MainActivity.toolbar.setBackgroundColor(getResources().getColor(R.color.colorIncome));
             } else {
                 appBarLayout.setBackgroundColor(getResources().getColor(R.color.colorExpense));
+                MainActivity.toolbar.setBackgroundColor(getResources().getColor(R.color.colorExpense));
             }
             Cursor c = MainActivity.abacoDataBase.rawQuery("" +
                     "select id,transaction_type_id, name, description " +

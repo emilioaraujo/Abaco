@@ -10,23 +10,30 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.blueboxmicrosystems.abaco.dialog.TagAddDialog;
 import com.blueboxmicrosystems.abaco.model.ListAccountModel;
 import com.blueboxmicrosystems.abaco.model.ListCategoryModel;
 import com.blueboxmicrosystems.abaco.model.ListTagModel;
+import com.blueboxmicrosystems.abaco.model.ListViewAdapter;
 import com.google.android.gms.plus.PlusOneButton;
 
 import java.util.ArrayList;
+
 
 /**
  * A fragment with a Google +1 button.
@@ -55,6 +62,8 @@ public class TagList extends Fragment {
     private Integer currentRecordId;
     AlertDialog tagDialog;
     TagAddDialog createUpdateDialog;
+    private ArrayList<String> stringArrayList;
+
     public TagList() {
         // Required empty public constructor
     }
@@ -106,34 +115,44 @@ public class TagList extends Fragment {
 
         //Find the +1 button
         // mPlusOneButton = (PlusOneButton) view.findViewById(R.id.plus_one_button);
-         list = (ListView) view.findViewById(R.id.lvTagList);
+        list = (ListView) view.findViewById(R.id.lvTagList);
+
+        //setData();
+        //ArrayAdapter<String> adapter = new ListViewAdapter(getActivity(), R.layout.item_listview, stringArrayList);
+        //list.setAdapter(adapter);
+
+
         return view;
     }
 
     public void configureTagList() {
+
         if (MainActivity.abacoDataBase != null) {
 
-            Cursor c = MainActivity.abacoDataBase.rawQuery("select id,name,description from main.tag order by id desc", null);
+            Cursor c = MainActivity.abacoDataBase.rawQuery("select id,name,description,color from main.tag order by id desc", null);
 
             final ArrayList<Integer> tagId = new ArrayList<Integer>();
             final ArrayList<Integer> tagImageId = new ArrayList<Integer>();
-            final ArrayList<String> tagName= new ArrayList<String>();
-            final ArrayList<String> tagDescription= new ArrayList<String>();
+            final ArrayList<String> tagName = new ArrayList<String>();
+            final ArrayList<String> tagDescription = new ArrayList<String>();
+            final ArrayList<Integer> tagColorId = new ArrayList<Integer>();
 
             if (c.moveToFirst()) {
                 do {
                     Integer id = c.getInt(0);
                     String name = c.getString(1);
                     String description = c.getString(2);
+                    Integer colorId = c.getInt(3);
 
                     tagId.add(id);
                     tagName.add(name);
                     tagDescription.add(description);
+                    tagColorId.add(colorId);
                     tagImageId.add(R.drawable.ic_menu_camera);
                 } while (c.moveToNext());
 
-                ListTagModel adapter = new ListTagModel(getActivity(),tagImageId, tagName, tagDescription);
-                list = (ListView) getView().findViewById(R.id.lvTagList);
+                //ListTagModel adapter = new ListTagModel(getActivity(), tagImageId, tagName, tagDescription);
+                ListViewAdapter adapter = new ListViewAdapter(getActivity(), R.layout.item_listview, tagName,tagDescription,tagColorId);
                 list.setAdapter(adapter);
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -145,7 +164,9 @@ public class TagList extends Fragment {
                 });
             }
         }
+
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -153,7 +174,6 @@ public class TagList extends Fragment {
         // Refresh the state of the +1 button each time the activity receives focus.
         //mPlusOneButton.initialize(PLUS_ONE_URL, PLUS_ONE_REQUEST_CODE);
     }
-
 
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -174,7 +194,7 @@ public class TagList extends Fragment {
         }
     }
 
-    public void showCreateUpdateDialog(Integer id){
+    public void showCreateUpdateDialog(Integer id) {
         Bundle args = new Bundle();
         args.putInt("id", id);
 
@@ -192,6 +212,22 @@ public class TagList extends Fragment {
                 //nada por hacer aqui
             }
         });
+    }
+
+    private void setData() {
+        stringArrayList = new ArrayList<>();
+        stringArrayList.add("Quỳnh Trang");
+        stringArrayList.add("Hoàng Biên");
+        stringArrayList.add("Đức Tuấn");
+        stringArrayList.add("Đặng Thành");
+        stringArrayList.add("Xuân Lưu");
+        stringArrayList.add("Phạm Thanh");
+        stringArrayList.add("Kim Kiên");
+        stringArrayList.add("Ngô Trang");
+        stringArrayList.add("Thanh Ngân");
+        stringArrayList.add("Nguyễn Dương");
+        stringArrayList.add("Quốc Cường");
+        stringArrayList.add("Trần Hà");
     }
 
     @Override

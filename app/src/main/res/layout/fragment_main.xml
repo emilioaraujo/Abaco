@@ -80,7 +80,7 @@
                         android:background="@color/colorExpense" />
 
                     <TextView
-                        android:text="Income"
+                        android:text="Expense"
                         android:layout_width="172dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtExpenseLabel"
@@ -112,7 +112,7 @@
                         android:background="@color/colorPrimaryDark" />
 
                     <TextView
-                        android:text="Income"
+                        android:text="Total"
                         android:layout_width="172dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtGeneralTotalLabel"
@@ -190,7 +190,7 @@
             android:id="@+id/fabActionTransfer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fab:fab_colorNormal="?attr/colorAccent"
+            fab:fab_colorNormal="@color/colorTransfer"
             fab:fab_icon="@drawable/shuffle_variant"
             fab:fab_size="mini"
             fab:fab_title="Account Transfer" />

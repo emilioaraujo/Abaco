@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorExpense">#ff0000</color>
     <color name="colorIncome">#00cc00</color>
+    <color name="colorTransfer">#ffcc00</color>
     <color name="negro_semitransparente">#B2000000</color>
     <color name="white">#fafafa</color>
 </resources>
