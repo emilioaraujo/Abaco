@@ -1,35 +1,23 @@
 package com.blueboxmicrosystems.abaco;
 
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.amulyakhare.textdrawable.TextDrawable;
-import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.blueboxmicrosystems.abaco.dialog.TagAddDialog;
-import com.blueboxmicrosystems.abaco.model.ListAccountModel;
-import com.blueboxmicrosystems.abaco.model.ListCategoryModel;
-import com.blueboxmicrosystems.abaco.model.ListTagModel;
 import com.blueboxmicrosystems.abaco.model.ListViewAdapter;
+import com.blueboxmicrosystems.abaco.model.entity.Tag;
 import com.google.android.gms.plus.PlusOneButton;
 
 import java.util.ArrayList;
@@ -52,6 +40,7 @@ public class TagList extends Fragment {
     private static final int PLUS_ONE_REQUEST_CODE = 0;
     // The URL to +1.  Must be a valid URL.
     private final String PLUS_ONE_URL = "http://developer.android.com";
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -59,7 +48,7 @@ public class TagList extends Fragment {
     ListView list;
     View view;
     private TagList.OnFragmentInteractionListener mListener;
-    private Integer currentRecordId;
+    private Tag currentRecord;
     AlertDialog tagDialog;
     TagAddDialog createUpdateDialog;
     private ArrayList<String> stringArrayList;
@@ -90,81 +79,58 @@ public class TagList extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.getActivity().setTitle("Tag List");
-
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tag_list, container, false);
+
+        //Find the +1 button
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fabAddTag);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("", "Boton add tag presionado");
-                currentRecordId = 0;
-                showCreateUpdateDialog(currentRecordId);
+                currentRecord = null;
+                showCreateUpdateDialog(currentRecord);
             }
         });
 
-        //Find the +1 button
-        // mPlusOneButton = (PlusOneButton) view.findViewById(R.id.plus_one_button);
         list = (ListView) view.findViewById(R.id.lvTagList);
-
-        //setData();
-        //ArrayAdapter<String> adapter = new ListViewAdapter(getActivity(), R.layout.item_listview, stringArrayList);
-        //list.setAdapter(adapter);
-
-
         return view;
     }
 
+    // Method to configure the tag list
     public void configureTagList() {
-
         if (MainActivity.abacoDataBase != null) {
-
+            //Selecting the records
             Cursor c = MainActivity.abacoDataBase.rawQuery("select id,name,description,color from main.tag order by id desc", null);
+            //Declaring arrays list to store the data
 
-            final ArrayList<Integer> tagId = new ArrayList<Integer>();
-            final ArrayList<Integer> tagImageId = new ArrayList<Integer>();
-            final ArrayList<String> tagName = new ArrayList<String>();
-            final ArrayList<String> tagDescription = new ArrayList<String>();
-            final ArrayList<Integer> tagColorId = new ArrayList<Integer>();
-
+            final ArrayList<Tag> tags = new ArrayList<Tag>();
             if (c.moveToFirst()) {
                 do {
-                    Integer id = c.getInt(0);
-                    String name = c.getString(1);
-                    String description = c.getString(2);
-                    Integer colorId = c.getInt(3);
-
-                    tagId.add(id);
-                    tagName.add(name);
-                    tagDescription.add(description);
-                    tagColorId.add(colorId);
-                    tagImageId.add(R.drawable.ic_menu_camera);
+                    tags.add(new Tag(c.getInt(0), 0, c.getString(1), c.getString(2), "", c.getInt(3)));
                 } while (c.moveToNext());
 
-                //ListTagModel adapter = new ListTagModel(getActivity(), tagImageId, tagName, tagDescription);
-                ListViewAdapter adapter = new ListViewAdapter(getActivity(), R.layout.item_listview, tagName,tagDescription,tagColorId);
+                //ListViewAdapter adapter = new ListViewAdapter(getActivity(), this, R.layout.item_listview, tagId, tagName, tagDescription, tagColorId);
+                ListViewAdapter adapter = new ListViewAdapter(getActivity(), this, R.layout.item_listview, tags);
                 list.setAdapter(adapter);
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        currentRecordId = tagId.get(position);
-                        showCreateUpdateDialog(currentRecordId);
+                        currentRecord = tags.get(position);
+                        showRecordDetail(tags.get(position));
                     }
                 });
             }
         }
-
     }
 
     @Override
@@ -174,7 +140,6 @@ public class TagList extends Fragment {
         // Refresh the state of the +1 button each time the activity receives focus.
         //mPlusOneButton.initialize(PLUS_ONE_URL, PLUS_ONE_REQUEST_CODE);
     }
-
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -194,10 +159,34 @@ public class TagList extends Fragment {
         }
     }
 
-    public void showCreateUpdateDialog(Integer id) {
-        Bundle args = new Bundle();
-        args.putInt("id", id);
 
+    public void showRecordDetail(Tag selectedTag) {
+        // TODO: Pending to implementation
+        Toast.makeText(getContext(), "Record Detail not Implemented", Toast.LENGTH_SHORT).show();
+    }
+
+    public void deleteRecord(final Tag selectedTag) {
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Confirm")
+                .setMessage("Do you really want delete: " + selectedTag.getName() + " ?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        MainActivity.abacoDataBase.delete("main.tag", "id=?", new String[]{selectedTag.getId().toString()});
+                        configureTagList();
+                        Toast.makeText(getContext(), "Record Deleted!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null).show();
+    }
+
+    public void showCreateUpdateDialog(Tag tag) {
+        Bundle args = new Bundle();
+        if (tag != null) {
+            args.putInt("id", tag.getId());
+        }else{
+            args.putInt("id", 0);
+        }
         createUpdateDialog = new TagAddDialog();
         createUpdateDialog.setArguments(args);
         createUpdateDialog.show(getActivity().getSupportFragmentManager(), "Tag");
@@ -209,25 +198,9 @@ public class TagList extends Fragment {
 
             @Override
             public void onCancel() {
-                //nada por hacer aqui
+                //Nothing to do there
             }
         });
-    }
-
-    private void setData() {
-        stringArrayList = new ArrayList<>();
-        stringArrayList.add("Quỳnh Trang");
-        stringArrayList.add("Hoàng Biên");
-        stringArrayList.add("Đức Tuấn");
-        stringArrayList.add("Đặng Thành");
-        stringArrayList.add("Xuân Lưu");
-        stringArrayList.add("Phạm Thanh");
-        stringArrayList.add("Kim Kiên");
-        stringArrayList.add("Ngô Trang");
-        stringArrayList.add("Thanh Ngân");
-        stringArrayList.add("Nguyễn Dương");
-        stringArrayList.add("Quốc Cường");
-        stringArrayList.add("Trần Hà");
     }
 
     @Override
@@ -235,7 +208,6 @@ public class TagList extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
 
     /**
      * This interface must be implemented by activities that contain this

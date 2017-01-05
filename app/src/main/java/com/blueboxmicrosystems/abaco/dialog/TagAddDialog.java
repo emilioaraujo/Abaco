@@ -10,14 +10,18 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.blueboxmicrosystems.abaco.MainActivity;
 import com.blueboxmicrosystems.abaco.R;
+import com.blueboxmicrosystems.abaco.model.ColorAdapter;
 import com.blueboxmicrosystems.abaco.model.ListTagModel;
 
 import org.w3c.dom.Text;
@@ -32,6 +36,7 @@ public class TagAddDialog extends DialogFragment {
     private ActionListener actionListener;
     private EditText txtTagName;
     private EditText txtTagDescription;
+    private Spinner spColors;
     Button btnCancel;
     Button btnSave;
     Integer id;
@@ -44,8 +49,8 @@ public class TagAddDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        id=0;
-        if(getArguments()!=null){
+        id = 0;
+        if (getArguments() != null) {
             id = getArguments().getInt("id");
         }
         return createDialog();
@@ -54,6 +59,7 @@ public class TagAddDialog extends DialogFragment {
     // TODO: agregar comentario de funcionalidad
     public interface ActionListener {
         public abstract void onSave(Integer id);
+
         public abstract void onCancel();
     }
 
@@ -82,12 +88,23 @@ public class TagAddDialog extends DialogFragment {
         btnSave = (Button) v.findViewById(R.id.btnSave);
         txtTagName = (EditText) v.findViewById(R.id.txtTagName);
         txtTagDescription = (EditText) v.findViewById(R.id.txtTagDescription);
+        spColors = (Spinner) v.findViewById(R.id.spColors);
+
+        //ColorGenerator generator = ColorGenerator.MATERIAL;
+
+        ColorAdapter<Integer> spinnerArrayAdapter = new ColorAdapter<Integer>(getActivity(), MainActivity.getColors());
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spColors.setAdapter(spinnerArrayAdapter);
+        spColors.setSelection(MainActivity.getColors().indexOf(0));
 
         if (MainActivity.abacoDataBase != null) {
-            Cursor c = MainActivity.abacoDataBase.rawQuery("select id,name,description from main.tag where id="+id, null);
+            Cursor c = MainActivity.abacoDataBase.rawQuery("select id,name,description,color from main.tag where id=" + id, null);
             if (c.moveToFirst()) {
                 txtTagName.setText(c.getString(1));
                 txtTagDescription.setText(c.getString(2));
+                if(MainActivity.getColors().indexOf(c.getInt(3))>0){
+                    spColors.setSelection(MainActivity.getColors().indexOf(c.getInt(3)));
+                }
             }
         }
 
@@ -112,7 +129,7 @@ public class TagAddDialog extends DialogFragment {
                         contentValues.put("icon", "");
                         contentValues.put("name", txtTagName.getText().toString());
                         contentValues.put("description", txtTagDescription.getText().toString());
-                        contentValues.put("color", "0xff4db6ac");
+                        contentValues.put("color", spColors.getSelectedItem().toString());
                         try {
                             if (id == 0) {
                                 MainActivity.abacoDataBase.insertOrThrow("main.tag", null, contentValues);

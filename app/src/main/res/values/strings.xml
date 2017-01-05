@@ -7,8 +7,10 @@
     <string name="action_cancel">Cancel</string>
     <string name="action_close">Close</string>
     <string name="action_delete">Delete</string>
+    <string name="action_show_details">Show Details</string>
     <string name="action_save">Save</string>
     <string name="action_settings">Settings</string>
+    <string name="action_edit">Edit</string>
 
     <string-array name="account_type">
         <item>Select</item>
@@ -17,4 +19,6 @@
         <item>Loan</item>
         <item>Credit Card</item>
     </string-array>
+
+
 </resources>

@@ -21,6 +21,7 @@ import android.view.MenuItem;
 
 import com.blueboxmicrosystems.abaco.database.AbacoDatabaseHelper;
 
+import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Locale;
 import java.util.Map;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity
     public static AbacoDatabaseHelper abacoDatabaseHelper;
     public static SQLiteDatabase abacoDataBase;
     public static Toolbar toolbar;
+    public static ArrayList<Integer> colors = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity
         //Abrimos la base de datos en modo escritura
         abacoDatabaseHelper = new AbacoDatabaseHelper(this, "AbacoDataBase", null, 27);
         abacoDataBase = abacoDatabaseHelper.getWritableDatabase();
+        this.setColors();
     }
 
 
@@ -92,6 +95,32 @@ public class MainActivity extends AppCompatActivity
         return currencies;
     }
 
+    private void setColors() {
+        if (colors == null) {
+            colors = new ArrayList<>();
+        }
+        colors.add(0xffe57373);
+        colors.add(0xfff06292);
+        colors.add(0xffba68c8);
+        colors.add(0xff9575cd);
+        colors.add(0xff7986cb);
+        colors.add(0xff64b5f6);
+        colors.add(0xff4fc3f7);
+        colors.add(0xff4dd0e1);
+        colors.add(0xff4db6ac);
+        colors.add(0xff81c784);
+        colors.add(0xffaed581);
+        colors.add(0xffff8a65);
+        colors.add(0xffd4e157);
+        colors.add(0xffffd54f);
+        colors.add(0xffffb74d);
+        colors.add(0xffa1887f);
+        colors.add(0xff90a4ae);
+    }
+
+    public static ArrayList<Integer> getColors() {
+        return colors;
+    }
 
     //@Override
     //public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {

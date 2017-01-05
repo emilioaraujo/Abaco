@@ -49,4 +49,9 @@
             android:id="@+id/btnSave"
             android:layout_weight="1" />
     </LinearLayout>
+
+    <Spinner
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/spColors" />
 </LinearLayout>
