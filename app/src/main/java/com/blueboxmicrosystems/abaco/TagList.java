@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.blueboxmicrosystems.abaco.controller.entiry.TagController;
 import com.blueboxmicrosystems.abaco.dialog.TagAddDialog;
 import com.blueboxmicrosystems.abaco.model.ListViewAdapter;
 import com.blueboxmicrosystems.abaco.model.entity.Tag;
@@ -52,7 +53,7 @@ public class TagList extends Fragment {
     AlertDialog tagDialog;
     TagAddDialog createUpdateDialog;
     private ArrayList<String> stringArrayList;
-
+ private final TagController tagController = new TagController(MainActivity.abacoDataBase);
     public TagList() {
         // Required empty public constructor
     }
@@ -108,17 +109,16 @@ public class TagList extends Fragment {
     // Method to configure the tag list
     public void configureTagList() {
         if (MainActivity.abacoDataBase != null) {
-            //Selecting the records
-            Cursor c = MainActivity.abacoDataBase.rawQuery("select id,name,description,color from main.tag order by id desc", null);
             //Declaring arrays list to store the data
-
-            final ArrayList<Tag> tags = new ArrayList<Tag>();
-            if (c.moveToFirst()) {
-                do {
-                    tags.add(new Tag(c.getInt(0), 0, c.getString(1), c.getString(2), "", c.getInt(3)));
-                } while (c.moveToNext());
-
-                //ListViewAdapter adapter = new ListViewAdapter(getActivity(), this, R.layout.item_listview, tagId, tagName, tagDescription, tagColorId);
+            final ArrayList<Tag> tags;
+            try {
+                tags = tagController.findAll();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (tags!=null) {
                 ListViewAdapter adapter = new ListViewAdapter(getActivity(), this, R.layout.item_listview, tags);
                 list.setAdapter(adapter);
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -172,7 +172,12 @@ public class TagList extends Fragment {
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        MainActivity.abacoDataBase.delete("main.tag", "id=?", new String[]{selectedTag.getId().toString()});
+                        try {
+                            tagController.delete(selectedTag);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(getContext(), "Error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
                         configureTagList();
                         Toast.makeText(getContext(), "Record Deleted!", Toast.LENGTH_SHORT).show();
                     }

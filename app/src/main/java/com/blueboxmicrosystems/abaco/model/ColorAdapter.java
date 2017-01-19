@@ -30,14 +30,13 @@ import java.util.List;
 
 public class ColorAdapter<T extends Integer> extends ArrayAdapter implements SpinnerAdapter {
     private Activity activity;
-    private final List<T> objects; // android.graphics.Color list
+    private final List<T> objects;
 
     public ColorAdapter(Activity context, List<T> objects) {
         super(context, R.layout.item_color, objects);
         this.activity = context;
         this.objects = objects;
     }
-
 
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
@@ -46,7 +45,6 @@ public class ColorAdapter<T extends Integer> extends ArrayAdapter implements Spi
 
         LayoutInflater inflater = this.activity.getLayoutInflater();
         rowView = inflater.inflate(R.layout.item_color, null);
-        //rowView.setBackgroundColor(objects.get(position));
 
         int color = objects.get(position);
         TextDrawable drawable = TextDrawable.builder().buildRound("", color); // radius in px
@@ -62,10 +60,9 @@ public class ColorAdapter<T extends Integer> extends ArrayAdapter implements Spi
 
         LayoutInflater inflater = this.activity.getLayoutInflater();
         rowView = inflater.inflate(R.layout.item_color, null);
-        //rowView.setBackgroundColor(objects.get(position));
 
         int color = objects.get(position);
-        TextDrawable drawable = TextDrawable.builder().buildRound("", color); // radius in px
+        TextDrawable drawable = TextDrawable.builder().buildRound("", color);
         ImageView image = (ImageView) rowView.findViewById(R.id.imageColor);
         image.setImageDrawable(drawable);
 

@@ -44,10 +44,10 @@
             android:id="@+id/item_actions"
             android:gravity="right"
             android:textAlignment="gravity"
-            android:layout_width="24dp"
+            android:layout_width="40dp"
             android:src="@drawable/dots_vertical"
             android:clickable="true"
-            android:layout_height="24dp"
+            android:layout_height="25dp"
 />
 
     </TableRow>

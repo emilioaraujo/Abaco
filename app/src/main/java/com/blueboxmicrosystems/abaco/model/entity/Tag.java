@@ -16,7 +16,12 @@ public class Tag implements Serializable {
     Integer color;
 
     public Tag() {
-
+        this.id = 0;
+        this.sync = 0;
+        this.name = "";
+        this.description = "";
+        this.icon = "";
+        this.color = 0;
     }
 
     public Tag(Integer id, Integer sync, String name, String description, String icon, Integer color) {

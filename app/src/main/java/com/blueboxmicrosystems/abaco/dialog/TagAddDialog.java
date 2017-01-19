@@ -21,8 +21,10 @@ import android.widget.Toast;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.blueboxmicrosystems.abaco.MainActivity;
 import com.blueboxmicrosystems.abaco.R;
+import com.blueboxmicrosystems.abaco.controller.entiry.TagController;
 import com.blueboxmicrosystems.abaco.model.ColorAdapter;
 import com.blueboxmicrosystems.abaco.model.ListTagModel;
+import com.blueboxmicrosystems.abaco.model.entity.Tag;
 
 import org.w3c.dom.Text;
 
@@ -37,9 +39,10 @@ public class TagAddDialog extends DialogFragment {
     private EditText txtTagName;
     private EditText txtTagDescription;
     private Spinner spColors;
-    Button btnCancel;
-    Button btnSave;
-    Integer id;
+    private Button btnCancel;
+    private Button btnSave;
+    private Integer id;
+    private final TagController tagController = new TagController(MainActivity.abacoDataBase);
 
     public TagAddDialog() {
 
@@ -49,9 +52,9 @@ public class TagAddDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        id = 0;
+        this.id = 0;
         if (getArguments() != null) {
-            id = getArguments().getInt("id");
+            this.id = getArguments().getInt("id");
         }
         return createDialog();
     }
@@ -59,7 +62,6 @@ public class TagAddDialog extends DialogFragment {
     // TODO: agregar comentario de funcionalidad
     public interface ActionListener {
         public abstract void onSave(Integer id);
-
         public abstract void onCancel();
     }
 
@@ -90,20 +92,24 @@ public class TagAddDialog extends DialogFragment {
         txtTagDescription = (EditText) v.findViewById(R.id.txtTagDescription);
         spColors = (Spinner) v.findViewById(R.id.spColors);
 
-        //ColorGenerator generator = ColorGenerator.MATERIAL;
-
         ColorAdapter<Integer> spinnerArrayAdapter = new ColorAdapter<Integer>(getActivity(), MainActivity.getColors());
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spColors.setAdapter(spinnerArrayAdapter);
         spColors.setSelection(MainActivity.getColors().indexOf(0));
 
         if (MainActivity.abacoDataBase != null) {
-            Cursor c = MainActivity.abacoDataBase.rawQuery("select id,name,description,color from main.tag where id=" + id, null);
-            if (c.moveToFirst()) {
-                txtTagName.setText(c.getString(1));
-                txtTagDescription.setText(c.getString(2));
-                if(MainActivity.getColors().indexOf(c.getInt(3))>0){
-                    spColors.setSelection(MainActivity.getColors().indexOf(c.getInt(3)));
+            Tag tag = null;
+            try {
+                tag = tagController.findById(id);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(getActivity(), "Error: "+e.getMessage(), Toast.LENGTH_SHORT);
+            }
+            if (tag!=null) {
+                txtTagName.setText(tag.getName());
+                txtTagDescription.setText(tag.getDescription());
+                if (MainActivity.getColors().indexOf(tag.getColor()) > 0) {
+                    spColors.setSelection(MainActivity.getColors().indexOf(tag.getColor()));
                 }
             }
         }
@@ -125,22 +131,24 @@ public class TagAddDialog extends DialogFragment {
                             actionListener.onCancel();
                             return;
                         }
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put("icon", "");
-                        contentValues.put("name", txtTagName.getText().toString());
-                        contentValues.put("description", txtTagDescription.getText().toString());
-                        contentValues.put("color", spColors.getSelectedItem().toString());
+
+                        Tag tag = new Tag();
+                        tag.setId(id);
+                        tag.setName(txtTagName.getText().toString());
+                        tag.setDescription(txtTagDescription.getText().toString());
+                        tag.setColor(Integer.parseInt(spColors.getSelectedItem().toString()));
+
                         try {
-                            if (id == 0) {
-                                MainActivity.abacoDataBase.insertOrThrow("main.tag", null, contentValues);
+                            if (tag.getId() == 0) {
+                                tagController.create(tag);
                             } else {
-                                MainActivity.abacoDataBase.update("main.tag", contentValues, "id=" + id, null);
+                                tagController.update(tag);
                             }
                             actionListener.onSave(2);
                             dismiss();
-                        } catch (Exception ex) {
-                            // TODO: Cambiar a mensaje de alerta
-                            Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT);
+                        } catch (Exception e) {
+                            Toast.makeText(getActivity(), "Error: "+e.getMessage(), Toast.LENGTH_SHORT);
+                            e.printStackTrace();
                         }
                     }
                 }
